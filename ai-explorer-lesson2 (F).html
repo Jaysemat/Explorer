@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Explorer Guide — Lesson 2: Why Does AI Make Mistakes?</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sun: #FFD93D;
+    --sky: #6BCB77;
+    --ocean: #4D96FF;
+    --coral: #FF6B6B;
+    --purple: #C77DFF;
+    --orange: #FF9A3C;
+    --cream: #FFFBF0;
+    --dark: #1a1a2e;
+    --card: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #2d1b00 0%, #5c3100 50%, #8B4513 100%);
+    padding: 60px 24px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-pattern {
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(3px 3px at 15% 25%, rgba(255,217,61,0.4), transparent),
+      radial-gradient(2px 2px at 55% 15%, rgba(255,217,61,0.3), transparent),
+      radial-gradient(3px 3px at 80% 45%, rgba(255,217,61,0.4), transparent),
+      radial-gradient(2px 2px at 35% 75%, rgba(255,217,61,0.3), transparent),
+      radial-gradient(3px 3px at 90% 80%, rgba(255,217,61,0.4), transparent),
+      radial-gradient(2px 2px at 10% 65%, rgba(255,217,61,0.3), transparent);
+    animation: sparkle 5s ease-in-out infinite alternate;
+  }
+
+  @keyframes sparkle {
+    from { opacity: 0.5; transform: scale(1); }
+    to { opacity: 1; transform: scale(1.05); }
+  }
+
+  .badge {
+    display: inline-block;
+    background: var(--orange);
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 14px;
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+    position: relative;
+  }
+
+  .hero h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(32px, 7vw, 64px);
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    position: relative;
+  }
+
+  .hero h1 span { color: var(--sun); }
+
+  .hero-sub {
+    font-size: 18px;
+    color: rgba(255,255,255,0.75);
+    max-width: 500px;
+    margin: 0 auto 32px;
+    line-height: 1.6;
+    position: relative;
+  }
+
+  .hero-emoji {
+    font-size: 80px;
+    display: block;
+    margin: 0 auto 20px;
+    animation: wobble 3s ease-in-out infinite;
+    position: relative;
+  }
+
+  @keyframes wobble {
+    0%, 100% { transform: rotate(-5deg) translateY(0); }
+    50% { transform: rotate(5deg) translateY(-10px); }
+  }
+
+  .lesson-nav {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+    position: relative;
+  }
+
+  .lesson-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+  }
+  .lesson-dot.active { background: var(--sun); }
+
+  /* VERSION TABS */
+  .version-nav {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 32px 24px 0;
+    flex-wrap: wrap;
+  }
+
+  .version-btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 18px;
+    padding: 12px 32px;
+    border-radius: 100px;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .version-btn.little {
+    background: var(--sun);
+    color: var(--dark);
+    border-color: var(--sun);
+  }
+
+  .version-btn.big {
+    background: white;
+    color: var(--ocean);
+    border-color: var(--ocean);
+  }
+
+  .version-btn.little.active {
+    background: var(--sun);
+    box-shadow: 0 6px 20px rgba(255,217,61,0.5);
+    transform: translateY(-2px);
+  }
+
+  .version-btn.big.active {
+    background: var(--ocean);
+    color: white;
+    box-shadow: 0 6px 20px rgba(77,150,255,0.5);
+    transform: translateY(-2px);
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  .version-content { display: none; }
+  .version-content.active { display: block; }
+
+  /* META BAR */
+  .meta-bar {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+  }
+
+  .meta-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: white;
+    border-radius: 100px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  /* SECTION CARDS */
+  .section-card {
+    background: white;
+    border-radius: 24px;
+    padding: 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.5s ease both;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    border-radius: 24px 24px 0 0;
+  }
+
+  .card-big-idea::before { background: var(--sun); }
+  .card-story::before { background: var(--sky); }
+  .card-activity::before { background: var(--coral); }
+  .card-activity2::before { background: var(--orange); }
+  .card-talk::before { background: var(--purple); }
+  .card-anchor::before { background: var(--ocean); }
+  .card-bonus::before { background: var(--sky); }
+  .card-parent::before { background: #aaa; }
+  .card-did-you-know::before { background: var(--orange); }
+
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding: 5px 14px;
+    border-radius: 100px;
+  }
+
+  .label-big-idea { background: #FFF5CC; color: #B8860B; }
+  .label-story { background: #E8F8EA; color: #2d7a3a; }
+  .label-activity { background: #FFE8E8; color: #c0392b; }
+  .label-activity2 { background: #FFF0E0; color: #b85c00; }
+  .label-talk { background: #F3E8FF; color: #7b2d9e; }
+  .label-anchor { background: #E8F0FF; color: #1a4db5; }
+  .label-bonus { background: #E8F8EA; color: #2d7a3a; }
+  .label-parent { background: #f0f0f0; color: #555; }
+  .label-did-you-know { background: #FFF0E0; color: #b85c00; }
+
+  .section-card h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 26px;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .section-card p {
+    font-size: 17px;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 14px;
+  }
+
+  .section-card p:last-child { margin-bottom: 0; }
+
+  /* BIG IDEA */
+  .big-idea-box {
+    background: linear-gradient(135deg, #FFD93D, #FFB800);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  .big-idea-box p {
+    font-family: 'Fredoka One', cursive;
+    font-size: 22px;
+    color: var(--dark);
+    margin: 0;
+  }
+
+  /* FUNNY HIGHLIGHT */
+  .funny-box {
+    background: linear-gradient(135deg, #fff0e0, #ffe4c4);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin: 16px 0;
+    border-left: 5px solid var(--orange);
+    font-size: 17px;
+    line-height: 1.7;
+    color: #5a3000;
+  }
+
+  .funny-box strong { color: #b85c00; }
+
+  /* DID YOU KNOW */
+  .did-you-know {
+    background: linear-gradient(135deg, #fff8e8, #ffefc8);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-top: 8px;
+  }
+
+  .did-you-know p {
+    font-size: 16px;
+    color: #5a3a00;
+    margin-bottom: 10px;
+  }
+
+  .did-you-know p:last-child { margin-bottom: 0; }
+
+  /* THREE REASONS */
+  .reasons { margin-top: 8px; }
+
+  .reason-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 16px;
+    border-radius: 14px;
+    margin-bottom: 12px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #333;
+  }
+
+  .reason-item:last-child { margin-bottom: 0; }
+  .reason-1 { background: #FFE8E8; }
+  .reason-2 { background: #FFF0E0; }
+  .reason-3 { background: #F3E8FF; }
+
+  .reason-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .reason-item strong {
+    display: block;
+    font-family: 'Fredoka One', cursive;
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  /* ACTIVITY STEPS */
+  .steps { list-style: none; margin-top: 8px; }
+
+  .steps li {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px dashed #eee;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #333;
+  }
+
+  .steps li:last-child { border-bottom: none; }
+
+  .step-num {
+    min-width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .step-coral { background: var(--coral); }
+  .step-orange { background: var(--orange); }
+
+  .activity-tip {
+    background: #f8f8f8;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-top: 16px;
+    font-size: 16px;
+    color: #555;
+    line-height: 1.7;
+  }
+
+  /* TALK ABOUT IT */
+  .questions { margin-top: 8px; }
+
+  .question-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px;
+    background: #F8F4FF;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #333;
+  }
+
+  .question-item:last-child { margin-bottom: 0; }
+  .q-emoji { font-size: 22px; flex-shrink: 0; }
+
+  /* ANCHOR */
+  .anchor-phrase {
+    background: linear-gradient(135deg, #FF6B6B, #c0392b);
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+    color: white;
+    margin-top: 8px;
+  }
+
+  .anchor-phrase .phrase {
+    font-family: 'Fredoka One', cursive;
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+
+  .anchor-phrase .phrase-sub {
+    font-size: 15px;
+    opacity: 0.85;
+    margin: 0;
+  }
+
+  /* BONUS */
+  .bonus-box {
+    background: linear-gradient(135deg, #E8F8EA, #d0f0d4);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-top: 8px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: #2d5a35;
+  }
+
+  /* RECAP */
+  .recap-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+
+  .recap-pill {
+    background: #f0f0f0;
+    border-radius: 100px;
+    padding: 8px 18px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #555;
+  }
+
+  .recap-pill.done {
+    background: var(--sky);
+    color: white;
+  }
+
+  /* PREVIEW CARD */
+  .preview-card {
+    background: linear-gradient(135deg, #1a1a2e, #0f3460);
+    border-radius: 24px;
+    padding: 36px 32px;
+    color: white;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .preview-card h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 28px;
+    margin-bottom: 12px;
+    color: var(--sun);
+  }
+
+  .preview-card p {
+    font-size: 16px;
+    opacity: 0.85;
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .lessons-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .lesson-pill {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    opacity: 0.7;
+  }
+
+  .lesson-pill.done {
+    background: rgba(107,203,119,0.3);
+    border-color: var(--sky);
+    opacity: 1;
+  }
+
+  .lesson-pill.current {
+    background: var(--sun);
+    color: var(--dark);
+    border-color: var(--sun);
+    opacity: 1;
+  }
+
+  .upgrade-btn {
+    display: inline-block;
+    background: var(--sun);
+    color: var(--dark);
+    font-family: 'Fredoka One', cursive;
+    font-size: 20px;
+    padding: 16px 40px;
+    border-radius: 100px;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(255,217,61,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .upgrade-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(255,217,61,0.5);
+  }
+
+  footer {
+    text-align: center;
+    padding: 40px 24px;
+    font-size: 14px;
+    color: #999;
+    border-top: 1px solid #eee;
+  }
+
+  footer strong { color: var(--dark); }
+
+  @media (max-width: 480px) {
+    .section-card { padding: 24px 20px; }
+    .hero { padding: 40px 20px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- DISCLAIMER BANNER -->
+<div style="background:#fff3cd;border-bottom:2px solid #ffc107;padding:12px 24px;text-align:center;font-family:'Nunito',sans-serif;font-size:14px;color:#5a4000;line-height:1.6;">
+  ⚠️ <strong>Notice:</strong> This is independent, user-created educational content — not verified or endorsed by any AI company.
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-pattern"></div>
+  <span class="hero-emoji">😬</span>
+  <div class="badge">📚 LESSON 2 OF 4 · AI EXPLORER GUIDE</div>
+  <h1>Why Does AI<br><span>Make Mistakes?</span></h1>
+  <p class="hero-sub">A fun 25-minute exploration of how things go hilariously wrong</p>
+  <div class="lesson-nav">
+    <div class="lesson-dot done"></div>
+    <div class="lesson-dot active"></div>
+    <div class="lesson-dot"></div>
+    <div class="lesson-dot"></div>
+  </div>
+</div>
+
+<!-- VERSION TABS -->
+<div class="version-nav">
+  <button class="version-btn little active" onclick="switchVersion('little')">🌟 Little Explorers · Ages 6–8</button>
+  <button class="version-btn big" onclick="switchVersion('big')">🚀 Big Explorers · Ages 8–11</button>
+</div>
+
+<div class="content">
+
+  <!-- ===================== LITTLE EXPLORERS ===================== -->
+  <div class="version-content active" id="little">
+
+    <div class="meta-bar">
+      <div class="meta-pill">⏱ 25 minutes</div>
+      <div class="meta-pill">🌟 Ages 6–8</div>
+      <div class="meta-pill">🏠 At home</div>
+      <div class="meta-pill">🧰 No materials needed</div>
+    </div>
+
+    <!-- RECAP -->
+    <div class="section-card card-parent">
+      <div class="section-label label-parent">🔄 Quick Recap</div>
+      <p>Before we start, ask your child: <strong>"What do you remember from Lesson 1?"</strong></p>
+      <p>Listen for the big idea — AI is a pattern-finder, not a thinker. Even a rough memory is great! Then say: <em>"Today we're going to find out what happens when AI's patterns go wrong..."</em></p>
+      <div class="recap-row">
+        <div class="recap-pill done">✅ Lesson 1: What is AI?</div>
+        <div class="recap-pill">📍 Lesson 2: Why it fails</div>
+      </div>
+    </div>
+
+    <!-- BIG IDEA -->
+    <div class="section-card card-big-idea">
+      <div class="section-label label-big-idea">💡 Big Idea</div>
+      <h2>Today your child will discover...</h2>
+      <div class="big-idea-box">
+        <p>🐺 AI is only as good as what it was shown!</p>
+      </div>
+    </div>
+
+    <!-- STORY -->
+    <div class="section-card card-story">
+      <div class="section-label label-story">📖 Read Together</div>
+      <h2>Zip's Very Embarrassing Mistake 😬</h2>
+
+      <p>Remember Zip? Our robot friend who got really good at spotting dogs? Well, Zip's friends decided to teach Zip something new — how to tell the difference between a <strong>dog</strong> and a <strong>wolf.</strong></p>
+
+      <p>They showed Zip thousands of pictures. Dogs in parks. Dogs in houses. Dogs wearing tiny hats. 🐕 And wolves — wolves in forests, wolves in mountains, wolves running through deep snow.</p>
+
+      <p>Zip studied every single picture and got really, really good. <strong>95 out of 100 right!</strong> Everyone was super impressed.</p>
+
+      <div class="funny-box">
+        🎉 "Zip is a genius!" they said. "Zip never makes mistakes!" they said. They were very, very wrong.
+      </div>
+
+      <p>One day they showed Zip a photo of a fluffy golden dog... standing in the snow. And Zip said: <strong>"WOLF!"</strong> 🐺</p>
+
+      <p>Then they showed a photo of a wolf — lying on a sunny beach. And Zip said: <strong>"Dog! Definitely a dog. Nice dog."</strong> 🐕</p>
+
+      <p>What happened?! Zip didn't actually learn what wolves <em>look like.</em> Zip learned that <strong>snow = wolf.</strong> Because almost every wolf photo had snow in it!</p>
+
+      <p>Zip found the wrong pattern. And nobody noticed until it was too late.</p>
+
+      <p><strong>This is called a mistake from bad data — and it happens to AI all the time.</strong></p>
+    </div>
+
+    <!-- ACTIVITY 1 -->
+    <div class="section-card card-activity">
+      <div class="section-label label-activity">🎮 Activity 1: The Sneaky Pattern Game</div>
+      <h2>Can you trick the AI?</h2>
+      <p>In this game, one person secretly teaches the "AI" (the other person) the WRONG pattern. Let's see what happens!</p>
+
+      <div style="background:#fff8e8;border-radius:14px;padding:16px 20px;margin-bottom:16px;border-left:4px solid #FFB800;">
+        <p style="font-weight:800;font-size:15px;margin-bottom:8px;color:#b85c00;">💡 Sneaky pattern ideas to try:</p>
+        <p style="font-size:15px;color:#5a3000;margin:0;line-height:1.9;">
+          🐾 Real rule: <strong>Animals</strong> — but only pick <em>small</em> animals, so AI thinks the rule is "small things"<br>
+          🍎 Real rule: <strong>Fruit</strong> — but only pick <em>red</em> fruit, so AI thinks the rule is "red things"<br>
+          👟 Real rule: <strong>Things you wear</strong> — but only pick shoes, so AI thinks the rule is "shoes"<br>
+          🌳 Real rule: <strong>Living things</strong> — but only pick plants, so AI thinks the rule is "plants"
+        </p>
+      </div>
+
+      <ol class="steps">
+        <li>
+          <div class="step-num step-coral">1</div>
+          <div>The <strong>Teacher</strong> thinks of a sneaky secret. Instead of teaching the real rule, they teach something that <em>looks</em> like the rule but isn't. For example — they want to teach "animals" but all the animals they pick happen to be small. So the AI might think the rule is "small things!"</div>
+        </li>
+        <li>
+          <div class="step-num step-coral">2</div>
+          <div>Play the Yes/No pattern game from Lesson 1 — but this time the Teacher deliberately only picks examples that have the sneaky pattern.</div>
+        </li>
+        <li>
+          <div class="step-num step-coral">3</div>
+          <div>After 8–10 guesses, the "AI" announces what they think the rule is.</div>
+        </li>
+        <li>
+          <div class="step-num step-coral">4</div>
+          <div>Now test it! The Teacher picks something that breaks the sneaky pattern. Does the AI get it wrong? 😄</div>
+        </li>
+        <li>
+          <div class="step-num step-coral">5</div>
+          <div>Reveal the real rule and talk about what happened. <strong>That's exactly what happened to Zip!</strong></div>
+        </li>
+      </ol>
+      <div class="activity-tip">
+        💡 <strong>Parent tip:</strong> If your child is the AI and gets fooled — celebrate it! Say "You got tricked just like a real AI!" That's the whole point. Getting it wrong is the lesson.
+      </div>
+    </div>
+
+    <!-- ACTIVITY 2 -->
+    <div class="section-card card-activity2">
+      <div class="section-label label-activity2">🎮 Activity 2: Fix Zip's Homework!</div>
+      <h2>Help Zip learn better</h2>
+      <p>Zip has been given some pictures to learn from. But the pictures are all wrong! Can you help fix them?</p>
+      <ol class="steps">
+        <li>
+          <div class="step-num step-orange">1</div>
+          <div>Parent reads this out loud: <em>"Zip is trying to learn what happy looks like. But every picture of a happy person in Zip's training is someone smiling with their teeth showing."</em></div>
+        </li>
+        <li>
+          <div class="step-num step-orange">2</div>
+          <div>Ask your child: <strong>"Can you be happy without showing your teeth?"</strong> Let them make different happy faces — laughing with mouth closed, eyes scrunched, giggling quietly.</div>
+        </li>
+        <li>
+          <div class="step-num step-orange">3</div>
+          <div>Ask: <strong>"Would Zip think YOU are happy right now?"</strong> Probably not — because Zip only learned one kind of happy!</div>
+        </li>
+        <li>
+          <div class="step-num step-orange">4</div>
+          <div>Together, brainstorm 5 different ways people look happy that Zip would need to learn. <em>(Hint: think about grandma, babies, your pet, your teacher...)</em></div>
+        </li>
+      </ol>
+      <div class="activity-tip">
+        💡 This shows kids that the <em>variety</em> of examples matters just as much as the number of examples.
+      </div>
+    </div>
+
+    <!-- DID YOU KNOW -->
+    <div class="section-card card-did-you-know">
+      <div class="section-label label-did-you-know">🤯 Did You Know?</div>
+      <h2>Real AI mistakes that actually happened!</h2>
+      <div class="did-you-know">
+        <p>🎙️ Early voice assistants were much better at understanding grown-up voices than kids' voices — because they mostly learned from adult recordings!</p>
+        <p>🌡️ A medical AI that was supposed to spot sick patients kept getting confused — it was actually learning to spot which hospital the patient was in, not how sick they were!</p>
+        <p>🐼 An image AI once thought a picture of a panda was a gibbon — because someone changed just a few tiny pixels that humans couldn't even see, but the AI got totally confused!</p>
+      </div>
+    </div>
+
+    <!-- TALK ABOUT IT -->
+    <div class="section-card card-talk">
+      <div class="section-label label-talk">💬 Talk About It</div>
+      <h2>Ask your child these questions</h2>
+      <div class="questions">
+        <div class="question-item">
+          <span class="q-emoji">🐺</span>
+          <span>Why did Zip think the dog in the snow was a wolf? Was Zip being silly, or was it a real mistake?</span>
+        </div>
+        <div class="question-item">
+          <span class="q-emoji">😊</span>
+          <span>If you were teaching Zip what "happy" looks like, what 3 pictures would you pick to make sure Zip learns it properly?</span>
+        </div>
+        <div class="question-item">
+          <span class="q-emoji">🤔</span>
+          <span>Can you think of something where it would be really bad if AI made a mistake like this? What could go wrong?</span>
+        </div>
+        <div class="question-item">
+          <span class="q-emoji">🌟</span>
+          <span>Who do you think should be responsible for fixing AI when it makes a mistake — the people who built it, or the people who use it?</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANCHOR -->
+    <div class="section-card card-anchor">
+      <div class="section-label label-anchor">🧭 Remember This!</div>
+      <h2>Your takeaway phrase</h2>
+      <div class="anchor-phrase">
+        <div class="phrase">🗑️ "Garbage in,<br>garbage out!"</div>
+        <p class="phrase-sub">If AI learns from bad examples, it gives bad answers. Say it together — it even rhymes!</p>
+      </div>
+    </div>
+
+    <!-- BONUS -->
+    <div class="section-card card-bonus">
+      <div class="section-label label-bonus">⭐ Bonus for Curious Kids</div>
+      <h2>Be an AI detective this week!</h2>
+      <div class="bonus-box">
+        <p>🔍 This week, whenever something seems unfair or wrong, ask: <strong>"Is there a pattern here that someone got wrong?"</strong></p>
+        <p>Maybe a teacher assumes all quiet kids are bored. Maybe a game assumes all players are right-handed. Patterns that don't fit everyone are everywhere once you start looking — in AI and in real life! 🕵️</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===================== BIG EXPLORERS ===================== -->
+  <div class="version-content" id="big">
+
+    <div class="meta-bar">
+      <div class="meta-pill">⏱ 30 minutes</div>
+      <div class="meta-pill">🚀 Ages 8–11</div>
+      <div class="meta-pill">🏠 At home</div>
+      <div class="meta-pill">🧰 Paper + pen optional</div>
+    </div>
+
+    <!-- RECAP -->
+    <div class="section-card card-parent">
+      <div class="section-label label-parent">🔄 Quick Recap</div>
+      <p>Ask your child to explain Lesson 1 back to you in one sentence. If they can say something like <em>"AI finds patterns in data instead of actually understanding things,"</em> they've got it. Build on that today.</p>
+      <div class="recap-row">
+        <div class="recap-pill done">✅ Lesson 1: What is AI?</div>
+        <div class="recap-pill">📍 Lesson 2: Why it fails</div>
+      </div>
+    </div>
+
+    <!-- BIG IDEA -->
+    <div class="section-card card-big-idea">
+      <div class="section-label label-big-idea">💡 Big Idea</div>
+      <h2>Today you'll discover...</h2>
+      <div class="big-idea-box">
+        <p>🧠 AI mistakes aren't random — they're predictable. And that makes them fixable.</p>
+      </div>
+    </div>
+
+    <!-- STORY -->
+    <div class="section-card card-story">
+      <div class="section-label label-story">📖 Read Together</div>
+      <h2>The Three Ways AI Gets It Wrong 🤖</h2>
+
+      <p>In Lesson 1 we learned that AI finds patterns. Today we learn what happens when those patterns go wrong — and why this matters way more than you might think.</p>
+
+      <p>There's a famous AI experiment where researchers trained a system to tell wolves from dogs in photos. It got 95% accuracy — impressive, right? Then they looked at <em>why</em> it was getting answers right. Turns out it had learned one simple rule: <strong>snow in the background = wolf.</strong> Because most wolf photos happened to have snow in them.</p>
+
+      <p>Show that AI a wolf on a sunny beach? Dog. Show it a golden retriever in the snow? Wolf. The AI wasn't wrong because it was broken. It was wrong because <strong>it learned the wrong pattern from imperfect data.</strong></p>
+
+      <p>This kind of mistake has a name: <strong>bias.</strong> And it's AI's biggest problem — not because AI is malicious, but because it reflects exactly what it was taught. If the world was unfair, the data shows that. If the examples were incomplete, the AI will be incomplete.</p>
+
+      <div class="reasons">
+        <div class="reason-item reason-1">
+          <div class="reason-icon">🗑️</div>
+          <div>
+            <strong>Reason 1: Bad Data</strong>
+            Garbage in, garbage out. If the training examples are wrong, missing important groups, or reflect old biases, the AI inherits all of that — at massive scale, automatically, with no one noticing.
+          </div>
+        </div>
+        <div class="reason-item reason-2">
+          <div class="reason-icon">🌍</div>
+          <div>
+            <strong>Reason 2: New Situations</strong>
+            AI is brittle outside its training. Show it something genuinely new — a context it's never seen — and it will still give you a confident answer. Just a wrong one. It has no way to know it's in unfamiliar territory.
+          </div>
+        </div>
+        <div class="reason-item reason-3">
+          <div class="reason-icon">😬</div>
+          <div>
+            <strong>Reason 3: Overconfidence</strong>
+            This is the sneaky one. AI doesn't know what it doesn't know. It will tell you the wrong answer with exactly the same calm confidence as the right one. There's no internal alarm that says "actually I'm guessing here."
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVITY 1 -->
+    <div class="section-card card-activity">
+      <div class="section-label label-activity">🎮 Activity 1: Design a Biased AI</div>
+      <h2>Build it wrong on purpose</h2>
+      <p>This activity is counterintuitive — you're going to deliberately create a biased AI. Understanding how bias gets in is the first step to keeping it out.</p>
+
+      <div style="background:#fff8e8;border-radius:14px;padding:16px 20px;margin-bottom:16px;border-left:4px solid #FFB800;">
+        <p style="font-weight:800;font-size:15px;margin-bottom:8px;color:#b85c00;">💡 Category ideas + how to bias them:</p>
+        <p style="font-size:15px;color:#5a3000;margin:0;line-height:1.9;">
+          🥦 <strong>"Healthy food"</strong> — only show vegetables → AI misses fruit, nuts, grains<br>
+          😄 <strong>"Fun activities"</strong> — only show outdoor sports → AI misses reading, art, games<br>
+          🌍 <strong>"Good leaders"</strong> — only show one type of person → AI builds unfair assumptions<br>
+          🐕 <strong>"Pets"</strong> — only show dogs and cats → AI misses fish, rabbits, birds<br>
+          📖 <strong>"Smart students"</strong> — only show kids who sit quietly → AI misses other learning styles
+        </p>
+      </div>
+
+      <ol class="steps">
+        <li>
+          <div class="step-num step-coral">1</div>
+          <div>Choose a category your AI will learn — try <strong>"things that are healthy"</strong> or <strong>"things that are fun"</strong> or <strong>"good students."</strong></div>
+        </li>
+        <li>
+          <div class="step-num step-coral">2</div>
+          <div>On paper or just out loud, list 10 examples you'd show your AI. But here's the twist — <strong>secretly make all your examples from one type.</strong> For example, if teaching "healthy food," only list vegetables. No fruit, no nuts, no grains.</div>
+        </li>
+        <li>
+          <div class="step-num step-coral">3</div>
+          <div>Now test your AI. Ask the other person: "Is an apple healthy?" Using only your training examples, what would your AI say? It might say no — because it only learned "vegetables = healthy!"</div>
+        </li>
+        <li>
+          <div class="step-num step-coral">4</div>
+          <div>Now fix it. What examples would you <em>add</em> to make the AI fairer and more accurate? How many different types of examples do you need?</div>
+        </li>
+      </ol>
+      <div class="activity-tip">
+        💡 <strong>The insight:</strong> Fixing bias isn't just about adding more data. It's about adding more <em>diverse</em> data. More of the same wrong examples just makes the bias stronger.
+      </div>
+    </div>
+
+    <!-- ACTIVITY 2 -->
+    <div class="section-card card-activity2">
+      <div class="section-label label-activity2">🎮 Activity 2: The Confidence Test</div>
+      <h2>When confidence becomes a problem</h2>
+      <p>This activity explores AI's most dangerous flaw — being confidently wrong.</p>
+      <ol class="steps">
+        <li>
+          <div class="step-num step-orange">1</div>
+          <div>One person is the <strong>Overconfident AI.</strong> They must answer every question with total confidence — no "I'm not sure" allowed. Always answer immediately and decisively.</div>
+        </li>
+        <li>
+          <div class="step-num step-orange">2</div>
+          <div>The other person asks questions that start easy and get harder. Try: "What's 8 x 7?" → "What's the capital of Australia?" → "What did I have for breakfast last Tuesday?" → "What will the weather be like in 10 years?"</div>
+        </li>
+        <li>
+          <div class="step-num step-orange">3</div>
+          <div>The Overconfident AI must always sound certain, even when they're totally guessing. Notice how it feels to receive those confident wrong answers.</div>
+        </li>
+        <li>
+          <div class="step-num step-orange">4</div>
+          <div>Debrief: When was the confidence helpful? When was it actually dangerous? What would you <em>want</em> an AI to say when it doesn't really know?</div>
+        </li>
+      </ol>
+      <div class="activity-tip">
+        💡 <strong>Real world connection:</strong> This is why checking AI answers matters — especially for important things like medical information, news, or homework help. Confidence is not the same as correctness.
+      </div>
+    </div>
+
+    <!-- DID YOU KNOW -->
+    <div class="section-card card-did-you-know">
+      <div class="section-label label-did-you-know">🤯 Real AI Mistakes That Changed Things</div>
+      <h2>These actually happened</h2>
+      <div class="did-you-know">
+        <p>⚖️ A risk assessment AI used in US courts gave higher risk scores to certain groups of people — not because of anything they did, but because of patterns in historical data that reflected past unfairness in the justice system.</p>
+        <p>🏥 Medical imaging AIs trained mostly on data from one demographic sometimes perform significantly worse on others — because they simply hadn't seen enough diverse examples.</p>
+        <p>🎙️ Voice recognition systems took years to work well for children and people with accents, because early training data was dominated by a narrow set of voices.</p>
+      </div>
+    </div>
+
+    <!-- TALK ABOUT IT -->
+    <div class="section-card card-talk">
+      <div class="section-label label-talk">💬 Talk About It</div>
+      <h2>Go deeper with these questions</h2>
+      <div class="questions">
+        <div class="question-item">
+          <span class="q-emoji">⚖️</span>
+          <span>If an AI makes a biased mistake that hurts someone — who is responsible? The people who built it? The people who used it? The people who provided the data?</span>
+        </div>
+        <div class="question-item">
+          <span class="q-emoji">🔍</span>
+          <span>How would you even know if an AI was being biased against you? What signs might you look for?</span>
+        </div>
+        <div class="question-item">
+          <span class="q-emoji">🛠️</span>
+          <span>If you were in charge of testing an AI before it was released, what groups of people would you make sure to test it on? Why?</span>
+        </div>
+        <div class="question-item">
+          <span class="q-emoji">🌍</span>
+          <span>AI is being used to make decisions in schools, hospitals, and courts. Based on what you know now, what rules would you make about that?</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANCHOR -->
+    <div class="section-card card-anchor">
+      <div class="section-label label-anchor">🧭 Remember This!</div>
+      <h2>Your takeaway phrase</h2>
+      <div class="anchor-phrase">
+        <div class="phrase">🗑️ "Garbage in, garbage out.<br>Bias in, bias out."</div>
+        <p class="phrase-sub">AI doesn't create unfairness — it amplifies whatever was already in the data.</p>
+      </div>
+    </div>
+
+    <!-- BONUS -->
+    <div class="section-card card-bonus">
+      <div class="section-label label-bonus">⭐ Bonus Challenge</div>
+      <h2>Become a bias detective</h2>
+      <div class="bonus-box">
+        <p>🕵️ <strong>Mission:</strong> Pick one AI tool you use regularly — autocorrect, a recommendation algorithm, a voice assistant, anything.</p>
+        <p>Spend 10 minutes trying to find its edges. What does it get wrong? Who might it work less well for? Can you figure out what it might have learned from that created that gap?</p>
+        <p>Write down your findings. You just did what professional AI auditors do — for real. 🔬</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- UPGRADE PREVIEW -->
+  <div class="preview-card">
+    <h2>🚀 You're Halfway There!</h2>
+    <p>Two lessons down, two to go. Next up: AI's superpowers vs. your superpowers — and why the best results always come from teamwork.</p>
+    <div class="lessons-preview">
+      <div class="lesson-pill done">✅ Lesson 1<br>What Is AI?</div>
+      <div class="lesson-pill done">✅ Lesson 2<br>Why AI Fails</div>
+      <div class="lesson-pill current">🔒 Lesson 3<br>Superpowers</div>
+      <div class="lesson-pill current">🔒 Lesson 4<br>AI Ethics</div>
+    </div>
+    <p>Get the full guide — both age versions, all 4 lessons, plus your printable Family Compass Card</p>
+    <button class="upgrade-btn">Get the Full Guide ✨</button>
+  </div>
+
+</div>
+
+<footer>
+  <p><strong>AI Explorer Guide</strong> · Lesson 2 of 4 · Free Edition</p>
+  <p style="margin-top:8px">Made with ❤️ for curious kids and the parents who explore with them</p>
+</footer>
+
+<script>
+  function switchVersion(version) {
+    document.querySelectorAll('.version-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.version-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById(version).classList.add('active');
+    document.querySelector('.version-btn.' + version).classList.add('active');
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Explorer Guide — Lesson 1 Activity Sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+
+  /* ── SCREEN STYLES ── */
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #f0f0f0;
+    margin: 0;
+    padding: 20px;
+    color: #1a1a2e;
+  }
+
+  .page {
+    background: white;
+    width: 750px;
+    margin: 0 auto 40px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+  }
+
+  .print-btn {
+    display: block;
+    width: 750px;
+    margin: 0 auto 16px;
+    background: #1a1a2e;
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 18px;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .print-btn:hover { background: #2d2d4e; }
+
+  .print-note {
+    display: block;
+    width: 750px;
+    margin: 0 auto 24px;
+    text-align: center;
+    font-size: 13px;
+    color: #888;
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+    padding: 24px 32px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .header-left h1 {
+    font-family: 'Fredoka One', cursive;
+    color: #FFD93D;
+    font-size: 22px;
+    margin-bottom: 2px;
+  }
+
+  .header-left p {
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    margin: 0;
+  }
+
+  .header-right {
+    text-align: right;
+  }
+
+  .age-badge {
+    display: inline-block;
+    border-radius: 100px;
+    padding: 5px 14px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  .age-little { background: #FFD93D; color: #1a1a2e; }
+  .age-big { background: #4D96FF; color: white; }
+
+  .name-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    justify-content: flex-end;
+  }
+
+  .name-line label {
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .name-line .name-box {
+    width: 130px;
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+    height: 18px;
+  }
+
+  /* ── PAGE BODY ── */
+  .page-body {
+    padding: 24px 32px;
+  }
+
+  /* BIG IDEA STRIP */
+  .big-idea-strip {
+    background: #FFF5CC;
+    border: 2px dashed #FFD93D;
+    border-radius: 12px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .big-idea-strip .icon { font-size: 24px; flex-shrink: 0; }
+
+  .big-idea-strip p {
+    font-family: 'Fredoka One', cursive;
+    font-size: 16px;
+    color: #1a1a2e;
+    margin: 0;
+  }
+
+  /* SECTION HEADERS */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    margin-top: 20px;
+  }
+
+  .section-header:first-of-type { margin-top: 0; }
+
+  .section-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .icon-coral { background: #FFE8E8; }
+  .icon-blue { background: #E8F0FF; }
+  .icon-yellow { background: #FFF5CC; }
+  .icon-green { background: #E8F8EA; }
+  .icon-purple { background: #F3E8FF; }
+
+  .section-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 17px;
+    color: #1a1a2e;
+  }
+
+  /* RULE CARDS */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .rule-card {
+    border: 2px dashed #ddd;
+    border-radius: 10px;
+    padding: 10px 8px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #444;
+    cursor: pointer;
+    line-height: 1.4;
+  }
+
+  .rule-card .card-emoji { font-size: 20px; display: block; margin-bottom: 4px; }
+
+  .rule-card.cut-hint {
+    border-style: dashed;
+    border-color: #bbb;
+  }
+
+  .cut-note {
+    font-size: 11px;
+    color: #aaa;
+    text-align: center;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  /* TRACKING GRID */
+  .tracking-intro {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+
+  .tracking-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .tracking-table th {
+    background: #1a1a2e;
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 13px;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 400;
+  }
+
+  .tracking-table th:first-child { border-radius: 8px 0 0 0; }
+  .tracking-table th:last-child { border-radius: 0 8px 0 0; }
+
+  .tracking-table td {
+    border-bottom: 1px solid #eee;
+    padding: 7px 12px;
+    font-size: 13px;
+    color: #333;
+  }
+
+  .tracking-table tr:last-child td { border-bottom: none; }
+  .tracking-table tr:nth-child(even) td { background: #fafafa; }
+
+  .yn-cell {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .yn-option {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: #555;
+  }
+
+  .yn-circle {
+    width: 16px; height: 16px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* STEPS LIST */
+  .steps-mini {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .steps-mini li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 6px 0;
+    border-bottom: 1px dotted #eee;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #333;
+  }
+
+  .steps-mini li:last-child { border-bottom: none; }
+
+  .step-dot {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: #FF6B6B;
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .step-dot-blue { background: #4D96FF; }
+  .step-dot-green { background: #6BCB77; }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 2px dashed #eee;
+    margin: 20px 0;
+  }
+
+  /* ANCHOR BOX */
+  .anchor-box {
+    background: linear-gradient(135deg, #4D96FF, #2563eb);
+    border-radius: 12px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .anchor-box .anchor-icon { font-size: 28px; flex-shrink: 0; }
+
+  .anchor-box .anchor-phrase {
+    font-family: 'Fredoka One', cursive;
+    font-size: 16px;
+    color: white;
+    margin: 0 0 2px;
+  }
+
+  .anchor-box .anchor-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.75);
+    margin: 0;
+  }
+
+  /* WRITE IT */
+  .write-it {
+    border: 2px solid #eee;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+  }
+
+  .write-it label {
+    font-family: 'Fredoka One', cursive;
+    font-size: 14px;
+    color: #555;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .write-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .write-line {
+    border-bottom: 1px solid #ddd;
+    height: 22px;
+    width: 100%;
+  }
+
+  /* TALK BUBBLES */
+  .talk-bubbles { display: flex; flex-direction: column; gap: 8px; }
+
+  .talk-bubble {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: #F8F4FF;
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: #333;
+  }
+
+  .bubble-emoji { font-size: 16px; flex-shrink: 0; }
+
+  /* FOOTER */
+  .page-footer {
+    background: #f8f8f8;
+    border-top: 1px solid #eee;
+    padding: 10px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: #aaa;
+  }
+
+  /* ── PRINT STYLES ── */
+  @media print {
+    body {
+      background: white;
+      padding: 0;
+      margin: 0;
+    }
+
+    .print-btn, .print-note { display: none !important; }
+
+    .page {
+      width: 100%;
+      max-width: 100%;
+      box-shadow: none;
+      border-radius: 0;
+      margin: 0;
+      page-break-after: always;
+    }
+
+    .page:last-child { page-break-after: auto; }
+
+    @page {
+      margin: 0.5in;
+      size: letter portrait;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">🖨️ Print Activity Sheets</button>
+<p class="print-note">Prints as 2 pages — one for each age group · Works best in black & white</p>
+
+<!-- ═══════════════════════════════════════════
+     PAGE 1 — LITTLE EXPLORERS (Ages 6–8)
+════════════════════════════════════════════ -->
+<div class="page">
+
+  <div class="page-header">
+    <div class="header-left">
+      <h1>🤖 Lesson 1: What Is AI?</h1>
+      <p>AI Explorer Guide · Activity Sheet</p>
+    </div>
+    <div class="header-right">
+      <div class="age-badge age-little">🌟 Little Explorers · Ages 6–8</div>
+      <div class="name-line">
+        <label>Explorer's name:</label>
+        <div class="name-box"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- BIG IDEA -->
+    <div class="big-idea-strip">
+      <span class="icon">💡</span>
+      <p>Today's Big Idea: AI is a pattern-finder, not a thinker!</p>
+    </div>
+
+    <!-- RULE CARDS -->
+    <div class="section-header">
+      <div class="section-icon icon-coral">✂️</div>
+      <div class="section-title">Step 1 — Pick a Secret Rule Card</div>
+    </div>
+    <p style="font-size:13px;color:#555;margin-bottom:10px;line-height:1.5;">Cut out the cards below, fold them, and put them in a pile face down. The Rule Keeper picks one without showing anyone!</p>
+
+    <div class="cards-grid">
+      <div class="rule-card">
+        <span class="card-emoji">🔴</span>
+        Things that are RED
+      </div>
+      <div class="rule-card">
+        <span class="card-emoji">⚽</span>
+        Things that are ROUND
+      </div>
+      <div class="rule-card">
+        <span class="card-emoji">🍎</span>
+        Things you can EAT
+      </div>
+      <div class="rule-card">
+        <span class="card-emoji">🐾</span>
+        ANIMALS
+      </div>
+      <div class="rule-card">
+        <span class="card-emoji">🔊</span>
+        Things that make NOISE
+      </div>
+      <div class="rule-card">
+        <span class="card-emoji">💧</span>
+        Things that are WET
+      </div>
+      <div class="rule-card">
+        <span class="card-emoji">🌙</span>
+        Things used at NIGHT
+      </div>
+      <div class="rule-card">
+        <span class="card-emoji">📦</span>
+        Things that FIT IN A BOX
+      </div>
+    </div>
+    <p class="cut-note">✂️ Cut along the dotted borders · Fold in half so the rule is hidden</p>
+
+    <!-- TRACKING GRID -->
+    <div class="section-header">
+      <div class="section-icon icon-blue">📋</div>
+      <div class="section-title">Step 2 — Track Your Guesses</div>
+    </div>
+    <p class="tracking-intro">The AI writes down each thing they point to, then circles YES or NO based on what the Rule Keeper says.</p>
+
+    <table class="tracking-table">
+      <thead>
+        <tr>
+          <th style="width:40%">I pointed to...</th>
+          <th style="width:30%">Rule Keeper said...</th>
+          <th style="width:30%">My new guess is...</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td></td>
+          <td><div class="yn-cell"><div class="yn-option"><div class="yn-circle"></div> YES</div><div class="yn-option"><div class="yn-circle"></div> NO</div></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><div class="yn-cell"><div class="yn-option"><div class="yn-circle"></div> YES</div><div class="yn-option"><div class="yn-circle"></div> NO</div></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><div class="yn-cell"><div class="yn-option"><div class="yn-circle"></div> YES</div><div class="yn-option"><div class="yn-circle"></div> NO</div></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><div class="yn-cell"><div class="yn-option"><div class="yn-circle"></div> YES</div><div class="yn-option"><div class="yn-circle"></div> NO</div></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><div class="yn-cell"><div class="yn-option"><div class="yn-circle"></div> YES</div><div class="yn-option"><div class="yn-circle"></div> NO</div></div></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><div class="yn-cell"><div class="yn-option"><div class="yn-circle"></div> YES</div><div class="yn-option"><div class="yn-circle"></div> NO</div></div></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr class="divider">
+
+    <!-- ANCHOR + WRITE IT -->
+    <div class="anchor-box">
+      <span class="anchor-icon">🧭</span>
+      <div>
+        <p class="anchor-phrase">"AI finds patterns. I understand things."</p>
+        <p class="anchor-sub">Say it together, then write it below!</p>
+      </div>
+    </div>
+
+    <div class="write-it">
+      <label>✏️ Write the big idea in your own words:</label>
+      <div class="write-lines">
+        <div class="write-line"></div>
+        <div class="write-line"></div>
+      </div>
+    </div>
+
+    <!-- TALK BUBBLES -->
+    <div class="section-header">
+      <div class="section-icon icon-purple">💬</div>
+      <div class="section-title">Talk About It</div>
+    </div>
+    <div class="talk-bubbles">
+      <div class="talk-bubble">
+        <span class="bubble-emoji">🐶</span>
+        <span>If Zip the robot saw a cat it had never seen before, how do you think it would figure out it wasn't a dog?</span>
+      </div>
+      <div class="talk-bubble">
+        <span class="bubble-emoji">🤔</span>
+        <span>What's something YOU know about dogs that Zip could never learn just from looking at pictures?</span>
+      </div>
+      <div class="talk-bubble">
+        <span class="bubble-emoji">🌟</span>
+        <span>Can you spot something in real life that uses pattern-finding? (Hint: your favorite apps or games!)</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span>AI Explorer Guide · Lesson 1 · Little Explorers</span>
+    <span>Independent educator content — not endorsed by any AI company</span>
+  </div>
+
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     PAGE 2 — BIG EXPLORERS (Ages 8–11)
+════════════════════════════════════════════ -->
+<div class="page">
+
+  <div class="page-header">
+    <div class="header-left">
+      <h1>🤖 Lesson 1: What Is AI?</h1>
+      <p>AI Explorer Guide · Activity Sheet</p>
+    </div>
+    <div class="header-right">
+      <div class="age-badge age-big">🚀 Big Explorers · Ages 8–11</div>
+      <div class="name-line">
+        <label>Explorer's name:</label>
+        <div class="name-box"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-body">
+
+    <!-- BIG IDEA -->
+    <div class="big-idea-strip">
+      <span class="icon">🧠</span>
+      <p>Today's Big Idea: AI recognizes patterns. Humans understand meaning.</p>
+    </div>
+
+    <!-- RULE CARDS -->
+    <div class="section-header">
+      <div class="section-icon icon-coral">✂️</div>
+      <div class="section-title">Step 1 — Choose Your Rule</div>
+    </div>
+    <p style="font-size:13px;color:#555;margin-bottom:10px;line-height:1.5;">The Algorithm picks one rule secretly. Start with an easy one, then try a tricky one in Round 2!</p>
+
+    <div class="cards-grid">
+      <div class="rule-card">
+        <span class="card-emoji">🌱</span>
+        Things that are ALIVE
+      </div>
+      <div class="rule-card">
+        <span class="card-emoji">🍳</span>
+        Found in a KITCHEN
+      </div>
+      <div class="rule-card">
+        <span class="card-emoji">✈️</span>
+        Things that can FLY
+      </div>
+      <div class="rule-card">
+        <span class="card-emoji">📚</span>
+        Used at SCHOOL
+      </div>
+      <div class="rule-card">
+        <span class="card-emoji">🌊</span>
+        Found near WATER
+      </div>
+      <div class="rule-card">
+        <span class="card-emoji">🟡</span>
+        Things that are YELLOW
+      </div>
+      <div class="rule-card">
+        <span class="card-emoji">🔤</span>
+        Has the letter "A" in its name
+      </div>
+      <div class="rule-card">
+        <span class="card-emoji">🔋</span>
+        Needs ELECTRICITY
+      </div>
+    </div>
+    <p class="cut-note">✂️ Cut out · Fold · Pick one secretly for each round</p>
+
+    <!-- TRACKING GRID -->
+    <div class="section-header">
+      <div class="section-icon icon-blue">📊</div>
+      <div class="section-title">Step 2 — Record Your Training Data</div>
+    </div>
+    <p class="tracking-intro">The Trainer records every guess and response. This is your training data — look for the pattern!</p>
+
+    <table class="tracking-table">
+      <thead>
+        <tr>
+          <th style="width:35%">Object named</th>
+          <th style="width:20%">In or Out?</th>
+          <th style="width:45%">Updated hypothesis (what's my rule?)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td></tr>
+        <tr><td></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+
+    <div class="write-it" style="margin-top:12px;">
+      <label>🎯 My final prediction (before testing):</label>
+      <div class="write-lines"><div class="write-line"></div></div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- ANCHOR -->
+    <div class="anchor-box">
+      <span class="anchor-icon">🧭</span>
+      <div>
+        <p class="anchor-phrase">"AI recognizes patterns. Humans understand meaning."</p>
+        <p class="anchor-sub">This one sentence explains almost all of modern AI.</p>
+      </div>
+    </div>
+
+    <!-- REFLECTION -->
+    <div class="section-header">
+      <div class="section-icon icon-green">✏️</div>
+      <div class="section-title">Reflect + Write</div>
+    </div>
+
+    <div class="write-it">
+      <label>📱 Name one app or technology you use that you think uses AI. How might it have learned?</label>
+      <div class="write-lines">
+        <div class="write-line"></div>
+        <div class="write-line"></div>
+      </div>
+    </div>
+
+    <div class="write-it">
+      <label>🧠 What's something you understand that you think would be nearly impossible to teach an AI from examples alone?</label>
+      <div class="write-lines">
+        <div class="write-line"></div>
+        <div class="write-line"></div>
+      </div>
+    </div>
+
+    <!-- TALK BUBBLES -->
+    <div class="section-header">
+      <div class="section-icon icon-purple">💬</div>
+      <div class="section-title">Talk About It</div>
+    </div>
+    <div class="talk-bubbles">
+      <div class="talk-bubble">
+        <span class="bubble-emoji">📱</span>
+        <span>What apps or tech do you use that might be using AI? How would it have learned to do what it does?</span>
+      </div>
+      <div class="talk-bubble">
+        <span class="bubble-emoji">🤖</span>
+        <span>If AI can only learn from examples, what happens if the examples are wrong or unfair?</span>
+      </div>
+      <div class="talk-bubble">
+        <span class="bubble-emoji">🧠</span>
+        <span>What's something you understand that would be nearly impossible to teach AI just from examples?</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="page-footer">
+    <span>AI Explorer Guide · Lesson 1 · Big Explorers</span>
+    <span>Independent educator content — not endorsed by any AI company</span>
+  </div>
+
+</div>
+
+</body>
+</html>

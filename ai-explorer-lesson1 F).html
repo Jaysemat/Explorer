@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Explorer Guide — Lesson 1: What Is AI?</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sun: #FFD93D;
+    --sky: #6BCB77;
+    --ocean: #4D96FF;
+    --coral: #FF6B6B;
+    --purple: #C77DFF;
+    --cream: #FFFBF0;
+    --dark: #1a1a2e;
+    --card: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 60px 24px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stars {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(2px 2px at 20% 30%, white, transparent),
+      radial-gradient(2px 2px at 60% 10%, white, transparent),
+      radial-gradient(1px 1px at 80% 50%, white, transparent),
+      radial-gradient(2px 2px at 40% 70%, white, transparent),
+      radial-gradient(1px 1px at 90% 80%, white, transparent),
+      radial-gradient(2px 2px at 10% 60%, white, transparent),
+      radial-gradient(1px 1px at 50% 40%, white, transparent),
+      radial-gradient(2px 2px at 70% 90%, white, transparent);
+    animation: twinkle 4s ease-in-out infinite alternate;
+  }
+
+  @keyframes twinkle {
+    from { opacity: 0.6; }
+    to { opacity: 1; }
+  }
+
+  .badge {
+    display: inline-block;
+    background: var(--sun);
+    color: var(--dark);
+    font-family: 'Fredoka One', cursive;
+    font-size: 14px;
+    padding: 6px 18px;
+    border-radius: 100px;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+  }
+
+  .hero h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(36px, 8vw, 72px);
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    position: relative;
+  }
+
+  .hero h1 span { color: var(--sun); }
+
+  .hero-sub {
+    font-size: 18px;
+    color: rgba(255,255,255,0.75);
+    max-width: 500px;
+    margin: 0 auto 32px;
+    line-height: 1.6;
+  }
+
+  .robot {
+    font-size: 80px;
+    display: block;
+    margin: 0 auto 20px;
+    animation: float 3s ease-in-out infinite;
+    position: relative;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  /* VERSION TABS */
+  .version-nav {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 32px 24px 0;
+    flex-wrap: wrap;
+  }
+
+  .version-btn {
+    font-family: 'Fredoka One', cursive;
+    font-size: 18px;
+    padding: 12px 32px;
+    border-radius: 100px;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .version-btn.little {
+    background: var(--sun);
+    color: var(--dark);
+    border-color: var(--sun);
+  }
+
+  .version-btn.big {
+    background: white;
+    color: var(--ocean);
+    border-color: var(--ocean);
+  }
+
+  .version-btn.little.active {
+    background: var(--sun);
+    box-shadow: 0 6px 20px rgba(255,217,61,0.5);
+    transform: translateY(-2px);
+  }
+
+  .version-btn.big.active {
+    background: var(--ocean);
+    color: white;
+    box-shadow: 0 6px 20px rgba(77,150,255,0.5);
+    transform: translateY(-2px);
+  }
+
+  /* CONTENT */
+  .content {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  .version-content { display: none; }
+  .version-content.active { display: block; }
+
+  /* META BAR */
+  .meta-bar {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+  }
+
+  .meta-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: white;
+    border-radius: 100px;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  /* SECTION CARDS */
+  .section-card {
+    background: white;
+    border-radius: 24px;
+    padding: 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.5s ease both;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    border-radius: 24px 24px 0 0;
+  }
+
+  .card-big-idea::before { background: var(--sun); }
+  .card-story::before { background: var(--sky); }
+  .card-activity::before { background: var(--coral); }
+  .card-talk::before { background: var(--purple); }
+  .card-anchor::before { background: var(--ocean); }
+  .card-bonus::before { background: var(--sky); }
+  .card-parent::before { background: #aaa; }
+
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding: 5px 14px;
+    border-radius: 100px;
+  }
+
+  .label-big-idea { background: #FFF5CC; color: #B8860B; }
+  .label-story { background: #E8F8EA; color: #2d7a3a; }
+  .label-activity { background: #FFE8E8; color: #c0392b; }
+  .label-talk { background: #F3E8FF; color: #7b2d9e; }
+  .label-anchor { background: #E8F0FF; color: #1a4db5; }
+  .label-bonus { background: #E8F8EA; color: #2d7a3a; }
+  .label-parent { background: #f0f0f0; color: #555; }
+
+  .section-card h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 26px;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .section-card p {
+    font-size: 17px;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 14px;
+  }
+
+  .section-card p:last-child { margin-bottom: 0; }
+
+  /* BIG IDEA */
+  .big-idea-box {
+    background: linear-gradient(135deg, #FFD93D, #FFB800);
+    border-radius: 16px;
+    padding: 24px;
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  .big-idea-box p {
+    font-family: 'Fredoka One', cursive;
+    font-size: 24px;
+    color: var(--dark);
+    margin: 0;
+  }
+
+  /* ACTIVITY STEPS */
+  .steps {
+    list-style: none;
+    margin-top: 8px;
+  }
+
+  .steps li {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px dashed #eee;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #333;
+  }
+
+  .steps li:last-child { border-bottom: none; }
+
+  .step-num {
+    min-width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--coral);
+    color: white;
+    font-family: 'Fredoka One', cursive;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* TALK QUESTIONS */
+  .questions { margin-top: 8px; }
+
+  .question-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px;
+    background: #F8F4FF;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #333;
+  }
+
+  .question-item:last-child { margin-bottom: 0; }
+
+  .q-emoji { font-size: 22px; flex-shrink: 0; }
+
+  /* ANCHOR */
+  .anchor-phrase {
+    background: linear-gradient(135deg, var(--ocean), #2563eb);
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+    color: white;
+    margin-top: 8px;
+  }
+
+  .anchor-phrase .phrase {
+    font-family: 'Fredoka One', cursive;
+    font-size: 26px;
+    margin-bottom: 8px;
+  }
+
+  .anchor-phrase .phrase-sub {
+    font-size: 15px;
+    opacity: 0.85;
+    margin: 0;
+  }
+
+  /* BONUS */
+  .bonus-box {
+    background: linear-gradient(135deg, #E8F8EA, #d0f0d4);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-top: 8px;
+    font-size: 17px;
+    line-height: 1.7;
+    color: #2d5a35;
+  }
+
+  /* PARENT NOTE */
+  .parent-note {
+    background: #f7f7f7;
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-top: 8px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: #555;
+    font-style: italic;
+  }
+
+  /* PREVIEW CARD */
+  .preview-card {
+    background: linear-gradient(135deg, #1a1a2e, #0f3460);
+    border-radius: 24px;
+    padding: 36px 32px;
+    color: white;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .preview-card h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 28px;
+    margin-bottom: 12px;
+    color: var(--sun);
+  }
+
+  .preview-card p {
+    font-size: 16px;
+    opacity: 0.85;
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .lessons-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .lesson-pill {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    opacity: 0.7;
+  }
+
+  .lesson-pill.current {
+    background: var(--sun);
+    color: var(--dark);
+    border-color: var(--sun);
+    opacity: 1;
+  }
+
+  .upgrade-btn {
+    display: inline-block;
+    background: var(--sun);
+    color: var(--dark);
+    font-family: 'Fredoka One', cursive;
+    font-size: 20px;
+    padding: 16px 40px;
+    border-radius: 100px;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(255,217,61,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .upgrade-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(255,217,61,0.5);
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 40px 24px;
+    font-size: 14px;
+    color: #999;
+    border-top: 1px solid #eee;
+  }
+
+  footer strong { color: var(--dark); }
+
+  /* RESPONSIVE */
+  @media (max-width: 480px) {
+    .section-card { padding: 24px 20px; }
+    .hero { padding: 40px 20px 60px; }
+    .big-idea-box p { font-size: 20px; }
+    .anchor-phrase .phrase { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- DISCLAIMER BANNER -->
+<div style="background:#fff3cd;border-bottom:2px solid #ffc107;padding:12px 24px;text-align:center;font-family:'Nunito',sans-serif;font-size:14px;color:#5a4000;line-height:1.6;">
+  ⚠️ <strong>Notice:</strong> This is independent, user-created educational content — not verified or endorsed by any AI company.
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="stars"></div>
+  <span class="robot">🤖</span>
+  <div class="badge">✨ FREE LESSON · AI EXPLORER GUIDE</div>
+  <h1>Lesson 1:<br><span>What Is AI?</span></h1>
+  <p class="hero-sub">A fun 20-minute adventure for parents and kids to explore together</p>
+</div>
+
+<!-- VERSION TABS -->
+<div class="version-nav">
+  <button class="version-btn little active" onclick="switchVersion('little')">🌟 Little Explorers · Ages 6–8</button>
+  <button class="version-btn big" onclick="switchVersion('big')">🚀 Big Explorers · Ages 8–11</button>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- ===================== LITTLE EXPLORERS ===================== -->
+  <div class="version-content active" id="little">
+
+    <div class="meta-bar">
+      <div class="meta-pill">⏱ 20 minutes</div>
+      <div class="meta-pill">🌟 Ages 6–8</div>
+      <div class="meta-pill">🏠 At home</div>
+      <div class="meta-pill">🧰 No materials needed</div>
+    </div>
+
+    <!-- PARENT NOTE -->
+    <div class="section-card card-parent">
+      <div class="section-label label-parent">👋 Parent Note</div>
+      <p>You don't need to know anything about AI to do this lesson. Just read along with your child and follow the steps. You might even learn something new together — that's the whole point! There are no wrong answers here.</p>
+    </div>
+
+    <!-- BIG IDEA -->
+    <div class="section-card card-big-idea">
+      <div class="section-label label-big-idea">💡 Big Idea</div>
+      <h2>Today your child will discover...</h2>
+      <div class="big-idea-box">
+        <p>🤖 AI is a pattern-finder, not a thinker!</p>
+      </div>
+    </div>
+
+    <!-- STORY -->
+    <div class="section-card card-story">
+      <div class="section-label label-story">📖 Read Together</div>
+      <h2>The Story of Zip the Robot 🤖</h2>
+      <p>Once upon a time, there was a robot named Zip. Zip wasn't like robots in movies — Zip couldn't walk around or talk or feel happy or sad. Zip could only do one thing: <strong>look at pictures and guess what was in them.</strong></p>
+      <p>Zip's friends wanted to teach Zip what a dog looked like. So they showed Zip thousands and thousands of pictures. Every time Zip saw a dog, they said <strong>"Yes, that's a dog!"</strong> Every time it wasn't a dog, they said <strong>"Nope, try again!"</strong></p>
+      <p>After seeing SO many pictures, something amazing happened. Zip got really, really good at spotting dogs — even dogs Zip had never seen before!</p>
+      <p>But here's the funny part. Zip didn't know what a dog <em>felt</em> like, or that dogs could be your best friend, or that some dogs are scared of thunderstorms. Zip just knew what a dog <em>looked like</em> in a picture.</p>
+      <p><strong>That's AI! It's really good at finding patterns — but it doesn't understand things the way you do.</strong></p>
+    </div>
+
+    <!-- ACTIVITY -->
+    <div class="section-card card-activity">
+      <div class="section-label label-activity">🎮 Activity: Be the AI!</div>
+      <h2>The Pattern Game</h2>
+      <p>Now it's your turn to think like an AI! This game is called <strong>"What's My Rule?"</strong></p>
+
+      <div style="background:#fff8e8;border-radius:14px;padding:16px 20px;margin-bottom:16px;border-left:4px solid #FFB800;">
+        <p style="font-weight:800;font-size:15px;margin-bottom:8px;color:#b85c00;">💡 Example rules to get you started:</p>
+        <p style="font-size:15px;color:#5a3000;margin:0;line-height:1.8;">
+          🔴 Things that are red &nbsp;·&nbsp; 🔵 Things that are round &nbsp;·&nbsp; 🍎 Things you can eat<br>
+          🐾 Animals &nbsp;·&nbsp; 📦 Things that fit in a box &nbsp;·&nbsp; 💧 Things that are wet<br>
+          🌙 Things you use at night &nbsp;·&nbsp; 🔊 Things that make noise
+        </p>
+      </div>
+
+      <ol class="steps">
+        <li>
+          <div class="step-num">1</div>
+          <div>One person is the <strong>Rule Keeper</strong> — they pick a secret rule from the examples above, or make up their own!</div>
+        </li>
+        <li>
+          <div class="step-num">2</div>
+          <div>The other person is the <strong>AI</strong> — they look around the room and point to different things, one at a time.</div>
+        </li>
+        <li>
+          <div class="step-num">3</div>
+          <div>The Rule Keeper only says <strong>"Yes!"</strong> or <strong>"Nope!"</strong> — no other hints!</div>
+        </li>
+        <li>
+          <div class="step-num">4</div>
+          <div>The AI keeps guessing based on the pattern of yes/no answers until they figure out the secret rule.</div>
+        </li>
+        <li>
+          <div class="step-num">5</div>
+          <div>Switch roles and play again! 🎉</div>
+        </li>
+      </ol>
+      <br>
+      <p>💡 <strong>After the game, talk about it:</strong> How did you figure out the rule? You found the pattern — just like AI does!</p>
+    </div>
+
+    <!-- TALK ABOUT IT -->
+    <div class="section-card card-talk">
+      <div class="section-label label-talk">💬 Talk About It</div>
+      <h2>Ask your child these questions</h2>
+      <div class="questions">
+        <div class="question-item">
+          <span class="q-emoji">🐶</span>
+          <span>If Zip the robot saw a picture of a cat it had never seen before, do you think it could figure out it wasn't a dog? How?</span>
+        </div>
+        <div class="question-item">
+          <span class="q-emoji">🤔</span>
+          <span>What's something YOU know about dogs that Zip could never learn just from looking at pictures?</span>
+        </div>
+        <div class="question-item">
+          <span class="q-emoji">🌟</span>
+          <span>Can you think of something in real life that uses pattern-finding? (Hint: think about your favorite apps or games!)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANCHOR -->
+    <div class="section-card card-anchor">
+      <div class="section-label label-anchor">🧭 Remember This!</div>
+      <h2>Your takeaway phrase</h2>
+      <div class="anchor-phrase">
+        <div class="phrase">🤖 "AI finds patterns.<br>I understand things."</div>
+        <p class="phrase-sub">Say it together! This is the big idea from today.</p>
+      </div>
+    </div>
+
+    <!-- BONUS -->
+    <div class="section-card card-bonus">
+      <div class="section-label label-bonus">⭐ Bonus for Curious Kids</div>
+      <h2>Want to go further?</h2>
+      <div class="bonus-box">
+        <p>🎨 Draw a picture of Zip the robot. What does Zip look like? What's Zip trying to learn? Does Zip have feelings?</p>
+        <p>Then draw what YOU know about something that Zip never could — like what your pet feels like, or what your favorite food tastes like.</p>
+        <p>Two pictures. Two very different kinds of knowing. 💛</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===================== BIG EXPLORERS ===================== -->
+  <div class="version-content" id="big">
+
+    <div class="meta-bar">
+      <div class="meta-pill">⏱ 25 minutes</div>
+      <div class="meta-pill">🚀 Ages 8–11</div>
+      <div class="meta-pill">🏠 At home</div>
+      <div class="meta-pill">🧰 No materials needed</div>
+    </div>
+
+    <!-- PARENT NOTE -->
+    <div class="section-card card-parent">
+      <div class="section-label label-parent">👋 Parent Note</div>
+      <p>Your child is probably already using AI without knowing it — recommendation algorithms, autocorrect, voice assistants. This lesson helps them look at familiar things with new eyes. Follow their lead — if they ask a question you can't answer, that's great. "I don't know, let's figure it out" is one of the best things a parent can say.</p>
+    </div>
+
+    <!-- BIG IDEA -->
+    <div class="section-card card-big-idea">
+      <div class="section-label label-big-idea">💡 Big Idea</div>
+      <h2>Today you'll discover...</h2>
+      <div class="big-idea-box">
+        <p>🧠 AI learns from examples, not from understanding — and that changes everything.</p>
+      </div>
+    </div>
+
+    <!-- STORY -->
+    <div class="section-card card-story">
+      <div class="section-label label-story">📖 Read Together</div>
+      <h2>How Does AI Actually Learn? 🧠</h2>
+      <p>Here's a question: how did you learn what a chair is?</p>
+      <p>Nobody gave you a rulebook that said <em>"four legs + flat seat + back support = chair."</em> You just saw chairs — lots of different ones — and eventually your brain figured it out. A beanbag is kind of a chair. A tree stump can be a chair. A shopping cart is definitely not a chair.</p>
+      <p>AI learns almost the same way. You show it millions of examples. You tell it which ones are correct. It adjusts. You repeat. After enough examples, it gets really good at recognizing things it's never seen before.</p>
+      <p>This is called <strong>Machine Learning</strong> — and it powers almost every piece of AI you've ever used. Your Netflix recommendations. Snapchat filters. Google Translate. Spam filters in email. All of them learned from examples.</p>
+      <p>But here's the crucial difference: <strong>you understand what a chair is. AI only recognizes what a chair looks like.</strong> It has no idea what it feels like to sit in one, that chairs are for resting, or that sometimes you spin in them just for fun.</p>
+      <p>Understanding vs. pattern recognition. That's the line between human intelligence and artificial intelligence.</p>
+    </div>
+
+    <!-- ACTIVITY -->
+    <div class="section-card card-activity">
+      <div class="section-label label-activity">🎮 Activity: Human Algorithm</div>
+      <h2>Train Your Own AI</h2>
+      <p>This activity shows you exactly how machine learning works — using your brain as the model.</p>
+
+      <div style="background:#fff8e8;border-radius:14px;padding:16px 20px;margin-bottom:16px;border-left:4px solid #FFB800;">
+        <p style="font-weight:800;font-size:15px;margin-bottom:8px;color:#b85c00;">💡 Example rules to choose from:</p>
+        <p style="font-size:15px;color:#5a3000;margin:0;line-height:1.8;">
+          🌱 Things that are alive &nbsp;·&nbsp; 🔊 Things that make noise &nbsp;·&nbsp; 🍳 Things in a kitchen<br>
+          ✈️ Things that can fly &nbsp;·&nbsp; 📚 Things used at school &nbsp;·&nbsp; 🌊 Things found near water<br>
+          🔤 Things with the letter "A" in their name &nbsp;·&nbsp; 🟡 Things that are yellow
+        </p>
+      </div>
+
+      <ol class="steps">
+        <li>
+          <div class="step-num">1</div>
+          <div>One person is the <strong>Algorithm</strong> — they secretly choose a rule from the examples above, or invent a tricky one of their own!</div>
+        </li>
+        <li>
+          <div class="step-num">2</div>
+          <div>The other person is the <strong>Trainer</strong> — they name or point to objects. The Algorithm only responds <strong>"In"</strong> or <strong>"Out."</strong> No other clues.</div>
+        </li>
+        <li>
+          <div class="step-num">3</div>
+          <div>The Trainer keeps a mental note of what's In and Out — looking for the pattern. That mental note is your <strong>training data.</strong></div>
+        </li>
+        <li>
+          <div class="step-num">4</div>
+          <div>When the Trainer thinks they know the rule, they make a prediction about a new object they haven't tried yet. Were they right?</div>
+        </li>
+        <li>
+          <div class="step-num">5</div>
+          <div><strong>Challenge round:</strong> Try a tricky rule where the pattern isn't obvious — like "things with the letter A in their name." See how many examples it takes to crack it!</div>
+        </li>
+      </ol>
+      <br>
+      <p>💡 <strong>The debrief:</strong> What you just experienced — collecting examples, finding patterns, making predictions — is literally what happens inside AI. Millions of times per second.</p>
+    </div>
+
+    <!-- TALK ABOUT IT -->
+    <div class="section-card card-talk">
+      <div class="section-label label-talk">💬 Talk About It</div>
+      <h2>Go deeper with these questions</h2>
+      <div class="questions">
+        <div class="question-item">
+          <span class="q-emoji">📱</span>
+          <span>What apps or technology do you use that you think might be using AI? How would it have learned to do what it does?</span>
+        </div>
+        <div class="question-item">
+          <span class="q-emoji">🤖</span>
+          <span>If AI can only learn from examples, what happens if the examples are wrong or unfair? Can you think of a way that could cause a problem?</span>
+        </div>
+        <div class="question-item">
+          <span class="q-emoji">🧠</span>
+          <span>What's something you understand that you think would be nearly impossible to teach an AI just from examples?</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANCHOR -->
+    <div class="section-card card-anchor">
+      <div class="section-label label-anchor">🧭 Remember This!</div>
+      <h2>Your takeaway phrase</h2>
+      <div class="anchor-phrase">
+        <div class="phrase">🤖 "AI recognizes patterns.<br>Humans understand meaning."</div>
+        <p class="phrase-sub">This one sentence unlocks how almost all AI actually works.</p>
+      </div>
+    </div>
+
+    <!-- BONUS -->
+    <div class="section-card card-bonus">
+      <div class="section-label label-bonus">⭐ Bonus for Curious Minds</div>
+      <h2>Go further this week</h2>
+      <div class="bonus-box">
+        <p>🔍 <strong>AI Spotting Challenge:</strong> For the next 3 days, try to spot AI being used around you. Each time you find one, ask: what examples did it probably learn from? What could it get wrong?</p>
+        <p>Keep a tally — you might be surprised how many you find. Most kids spot 10+ in a single day once they know what to look for. 🚀</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- UPGRADE PREVIEW -->
+  <div class="preview-card">
+    <h2>🚀 Continue the Adventure</h2>
+    <p>This was just Lesson 1! The full AI Explorer Guide includes 3 more lessons — each building on what you discovered today.</p>
+    <div class="lessons-preview">
+      <div class="lesson-pill current">✅ Lesson 1<br>What Is AI?</div>
+      <div class="lesson-pill">🔒 Lesson 2<br>Why AI Fails</div>
+      <div class="lesson-pill">🔒 Lesson 3<br>Superpowers</div>
+      <div class="lesson-pill">🔒 Lesson 4<br>AI Ethics</div>
+    </div>
+    <p>Both age versions included · Printable Compass Card · Parent Primer</p>
+    <button class="upgrade-btn">Get the Full Guide ✨</button>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>AI Explorer Guide</strong> · Lesson 1 of 4 · Free Edition</p>
+  <p style="margin-top:8px">Made with ❤️ for curious kids and the parents who explore with them</p>
+</footer>
+
+<script>
+  function switchVersion(version) {
+    document.querySelectorAll('.version-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.version-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById(version).classList.add('active');
+    document.querySelector('.version-btn.' + version).classList.add('active');
+  }
+</script>
+
+</body>
+</html>
